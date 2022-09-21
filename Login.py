@@ -1,42 +1,4 @@
 import PySimpleGUI as sg
-import pyodbc as od
-
-
-def conexao_banco():
-    conexao = od.connect("""
-        Driver={SQL Server};
-        Server=LAPTOP-FCR3HP98\SQLEXPRESS;
-        Database=Usuario_basico;
-        """)
-    
-    cursor = conexao.cursor()
-    return cursor
-
-
-def consulta_banco():
-    comando = f"""select*from tb_usuario
-                    """
-    return comando 
-
-
-def login_banco(n, s):
-    nome = n
-    senha = s
-    comando = f"""select*from tb_usuario where nome_usuario like {'%nome%'} and senha_usuario like {'%senha%'}
-                    """
-    #cursor.execute(comando)
-    return n, s, comando
-
-    
-def cadastro_banco(self, n, s, mail):
-    self.nome = n
-    self.senha = s
-    self.email = mail
-    comando = f"""exec sp_cadastro_usuario {'nome'}, {'senha'}, {'email'}"""
-    #cursor.execute(comando)
-    #cursor.commit()
-    return n, s, mail, comando
-
 
 
 def janela_login():
@@ -70,28 +32,17 @@ janela1, janela2 = janela_login(), None
 # Eventos
 while True:
     janela, eventos, valores = sg.read_all_windows()
-    
+
     # Quando a janela for fechada
     if janela == janela1 and eventos == sg.WIN_CLOSED:
         break
-    # Quando realizar o login
+        # Quando realizar o login
     if janela == janela1 and eventos == 'Entrar':
-        if valores['usuario_login'] != '' and valores['senha_login'] != '':
+        if valores['usuario_login'] == 'Paulo' and valores['senha_login'] == '123456':
             usuario1 = valores['usuario_login']
-            senha1 = valores['senha_login']
-            conexao = conexao_banco()
-            
-        
-            login1 = login_banco(n=usuario1, s=senha1)
-            
-            consulta = login1
-            conexao.execute(consulta)
-            if login_banco(od.count) > 0:
-                sg.popup(f'Seja Bem-Vindo {usuario1}!')
-            else:
-                sg.popup('Usuário ou senha incorretos, tente novamente.')
+            sg.popup(f'Seja Bem-Vindo {usuario1}!')
         else:
-            sg.popup('Preencha todos os campos.')
+                        sg.popup('Usuário ou senha incorretos, tente novamente.')
     # Quando for para a proxima janela
     if janela == janela1 and eventos == 'Cadastrar':
         janela2 = janela_cadastro()
@@ -104,10 +55,10 @@ while True:
     if janela == janela2 and eventos == 'Confirmar Cadastro':
         if valores['usuario_cadastro'] == '' or valores['senha_cadastro'] == '' or valores['email_cadastro'] == '':
             sg.popup('Preencha corretamente todos os campos obrigatórios(*).')
-        
+
         if valores['usuario_cadastro'] != '' or valores['senha_cadastro'] != '' or valores['email_cadastro'] != '':
             usuario_cadastro = valores['usuario_cadastro']
             senha_cadastro = valores['senha_cadastro']
             email_cadastro = valores['email_cadastro']
             sg.popup('Cadastro realizado com sucesso! Voltando a tela de login.')
-            janela.close()
+            janela2.close()
