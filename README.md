@@ -1,1 +1,1 @@
-Primeria interface de login em Python utilizando PyAutoGui.
+Primeria interface de login em Python utilizando PySimpleGui.
